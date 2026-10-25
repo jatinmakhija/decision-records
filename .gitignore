@@ -1,0 +1,5 @@
+node_modules/
+dist/
+*.tgz
+LOCAL_PUBLISH.md
+.DS_Store

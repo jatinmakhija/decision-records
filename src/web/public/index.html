@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Decisions</title>
+    <link rel="stylesheet" href="/app.css" />
+  </head>
+  <body>
+    <header>
+      <a href="#" id="home">Decisions</a>
+      <form id="search-form">
+        <input id="q" type="search" placeholder="Search decisions" />
+        <select id="status-filter">
+          <option value="">Any status</option>
+          <option>proposed</option>
+          <option>decided</option>
+          <option>rejected</option>
+          <option>superseded</option>
+          <option>revoked</option>
+        </select>
+        <button type="submit">Search</button>
+      </form>
+    </header>
+    <main id="main"></main>
+    <script src="/app.js"></script>
+  </body>
+</html>

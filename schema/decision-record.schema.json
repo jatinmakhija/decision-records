@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://decision-records.dev/schema/decision-record-0.1.json",
+  "title": "Decision record 0.1",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["schemaVersion", "id", "decision", "status", "createdAt", "body"],
+  "properties": {
+    "schemaVersion": { "const": "0.1" },
+    "id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    },
+    "decision": { "type": "string", "minLength": 1 },
+    "status": {
+      "enum": ["proposed", "decided", "rejected", "superseded", "revoked"]
+    },
+    "createdAt": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|\\+00:00)$"
+    },
+    "updatedAt": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|\\+00:00)$"
+    },
+    "decidedAt": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "deciders": { "type": "array", "items": { "type": "string" } },
+    "participants": { "type": "array", "items": { "type": "string" } },
+    "recordedBy": { "type": "string" },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "sources": { "type": "array", "items": { "type": "string" } },
+    "supersedes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      }
+    },
+    "supersededBy": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      }
+    },
+    "related": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      }
+    },
+    "body": { "type": "string" }
+  }
+}

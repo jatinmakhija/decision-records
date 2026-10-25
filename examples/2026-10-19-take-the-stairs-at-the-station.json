@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "0.1",
+  "id": "d4e8a013-6b27-4c91-8f55-1a2b3c4d5e6f",
+  "decision": "Take the stairs at the station",
+  "status": "decided",
+  "createdAt": "2026-10-19T07:05:00Z",
+  "decidedAt": "2026-10-19",
+  "recordedBy": "Sam",
+  "tags": [
+    "personal"
+  ],
+  "body": ""
+}

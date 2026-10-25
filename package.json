@@ -1,0 +1,44 @@
+{
+  "name": "decision-records",
+  "version": "0.1.0",
+  "description": "Local-first decision records for any kind of choice. Plain Markdown and JSON files, a CLI, a local browser UI, and a thin MCP server.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "decision": "./dist/src/cli.js",
+    "decision-records": "./dist/src/cli.js"
+  },
+  "files": [
+    "dist/src",
+    "schema",
+    "examples",
+    "docs",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node scripts/copy-web.mjs",
+    "prepublishOnly": "npm test",
+    "test": "npm run build && node --test dist/test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OWNER/decision-records.git"
+  },
+  "keywords": [
+    "decision",
+    "decision-records",
+    "adr"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.20.0",
+    "yaml": "^2.8.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.0",
+    "typescript": "^5.9.2"
+  }
+}
