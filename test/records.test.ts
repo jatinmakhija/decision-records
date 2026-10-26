@@ -84,6 +84,7 @@ describe("store", () => {
     const config = await readStoreConfig(dir);
     const short = await createRecord(dir, config, { decision: "Short call", enriched: false, recordedBy: "Ada" });
     assert.equal(short.record.body, "");
+    assert.match(path.basename(short.filePath), new RegExp(`-${short.record.id}\\.md$`));
     assert.equal(short.record.decidedAt, undefined);
     const full = await createRecord(dir, config, { decision: "Longer call", recordedBy: "Ada" });
     assert.match(full.record.body, /## Context\n\n## Rationale/);

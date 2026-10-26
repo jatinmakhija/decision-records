@@ -44,7 +44,7 @@ When Confluence is enabled and neither publish flag is set, an interactive termi
 
 ### `decision list`
 
-List records, newest first.
+List records, newest first. Each row starts with the first 8 characters of the id. Pass that value to `show`, `edit`, `decide`, `reject`, `revoke`, `supersede`, or `publish`.
 
 | Flag | Effect |
 | --- | --- |

@@ -233,6 +233,17 @@ async function maybePublish(
   }
 }
 
+function openInBrowser(url: string): void {
+  if (!process.stdout.isTTY) return;
+  const command = process.platform === "darwin" ? "open" : process.platform === "win32" ? "cmd" : "xdg-open";
+  const args = process.platform === "win32" ? ["/c", "start", "", url] : [url];
+  const child = spawn(command, args, { stdio: "ignore", detached: true });
+  child.on("error", () => {
+    process.stderr.write(`Open this address in a browser: ${url}\n`);
+  });
+  child.unref();
+}
+
 async function openEditor(filePath: string): Promise<void> {
   const editor = process.env.EDITOR || "vi";
   await new Promise<void>((resolve, reject) => {
@@ -255,7 +266,7 @@ function formatList(items: StoredRecord[], asJson: boolean): void {
   }
   for (const item of items) {
     const tags = item.record.tags?.length ? `  ${item.record.tags.join(", ")}` : "";
-    process.stdout.write(`${item.record.createdAt.slice(0, 10)}  ${item.record.status.padEnd(11)} ${item.record.decision}${tags}\n`);
+    process.stdout.write(`${item.record.id.slice(0, 8)}  ${item.record.createdAt.slice(0, 10)}  ${item.record.status.padEnd(11)} ${item.record.decision}${tags}\n`);
   }
 }
 
@@ -436,6 +447,7 @@ async function main(argv: string[]): Promise<void> {
     await ensureMarker(located);
     const server = await startServer(located.root);
     process.stdout.write(`Open ${server.url}\n`);
+    openInBrowser(server.url);
     await new Promise(() => {});
   }
   if (command === "confluence") {

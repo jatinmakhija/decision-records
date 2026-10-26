@@ -35,6 +35,7 @@ async function showList() {
     ? records.map((record) => {
         const tags = (record.tags || []).join(", ");
         return `<a class="row" href="#record/${record.id}">
+          <span class="id">${escape(record.id.slice(0, 8))}</span>
           <span>${escape(record.createdAt.slice(0, 10))}</span>
           <span class="badge">${escape(record.status)}</span>
           <span>${escape(record.decision)}${tags ? ` <span class="meta">${escape(tags)}</span>` : ""}</span>
@@ -46,11 +47,11 @@ async function showList() {
         <input id="sentence" placeholder="The decision, in one sentence" required />
         <div class="actions">
           <button type="submit" data-enriched="false">Save</button>
-          <button type="submit" data-enriched="true">Save with sections</button>
+          <button type="submit" class="secondary" data-enriched="true">Save with sections</button>
         </div>
       </form>
     </section>
-    <section>${rows}</section>`;
+    <section class="list">${rows}</section>`;
   document.querySelector("#capture").addEventListener("submit", async (event) => {
     event.preventDefault();
     const enriched = event.submitter?.dataset.enriched === "true";
@@ -138,27 +139,31 @@ async function showEditor(id) {
   const record = await api(`/api/records/${id}`);
   const fields = ["Context", "Rationale", "Alternatives", "Consequences"].map((name) => {
     const value = record.sections?.[name] || "";
-    return `<label>${name}<span>${hints[name]}</span>
+    return `<label><strong>${name}</strong><span>${hints[name]}</span>
       <textarea name="${name}">${escape(value)}</textarea></label>`;
   }).join("");
   main.innerHTML = `<form class="editor" id="editor">
-      <label>Decision<span>The choice, in one sentence.</span>
+      <h1>Edit decision</h1>
+      <p class="meta id">${escape(record.id)}</p>
+      <label><strong>Decision</strong><span>The choice, in one sentence.</span>
         <input name="decision" value="${escape(record.decision)}" required />
       </label>
-      <label>Deciders<span>People accountable for the choice.</span>
-        <input name="deciders" value="${escape((record.deciders || []).join(", "))}" />
-      </label>
-      <label>Participants<span>People present who did not decide.</span>
-        <input name="participants" value="${escape((record.participants || []).join(", "))}" />
-      </label>
-      <label>Tags
+      <div class="pair">
+        <label><strong>Deciders</strong><span>People accountable for the choice.</span>
+          <input name="deciders" value="${escape((record.deciders || []).join(", "))}" />
+        </label>
+        <label><strong>Participants</strong><span>People present who did not decide.</span>
+          <input name="participants" value="${escape((record.participants || []).join(", "))}" />
+        </label>
+      </div>
+      <label><strong>Tags</strong><span>Comma-separated labels.</span>
         <input name="tags" value="${escape((record.tags || []).join(", "))}" />
       </label>
       ${fields}
       <p class="warn" id="warn"></p>
       <div class="actions">
         <button type="submit">Save</button>
-        <a href="#record/${record.id}">Cancel</a>
+        <a class="secondary" href="#record/${record.id}">Cancel</a>
       </div>
     </form>`;
   document.querySelector("#editor").addEventListener("submit", async (event) => {
@@ -201,13 +206,24 @@ async function route() {
   }
 }
 
+function showAll() {
+  if (location.hash) location.hash = "";
+  void showList();
+}
+
 document.querySelector("#search-form").addEventListener("submit", (event) => {
   event.preventDefault();
-  location.hash = "";
-  void route();
+  showAll();
 });
+queryInput.addEventListener("search", () => {
+  if (!queryInput.value) statusFilter.value = "";
+  showAll();
+});
+statusFilter.addEventListener("change", () => showAll());
 document.querySelector("#home").addEventListener("click", () => {
-  location.hash = "";
+  queryInput.value = "";
+  statusFilter.value = "";
+  showAll();
 });
 window.addEventListener("hashchange", () => void route());
 void route();

@@ -256,22 +256,13 @@ export async function saveStored(item: StoredRecord, expectedMtime?: number): Pr
   return { ...item, mtimeMs: info.mtimeMs };
 }
 
-function fileName(createdAt: string, decision: string, format: "md" | "json", taken: Set<string>): string {
+function fileName(createdAt: string, decision: string, id: string, format: "md" | "json"): string {
   const date = createdAt.slice(0, 10);
-  const base = `${date}-${slugify(decision)}`;
   const ext = format === "json" ? ".json" : ".md";
-  let name = `${base}${ext}`;
-  let n = 2;
-  while (taken.has(name)) {
-    name = `${base}-${n}${ext}`;
-    n += 1;
-  }
-  return name;
+  return `${date}-${slugify(decision)}-${id}${ext}`;
 }
 
 export async function createRecord(root: string, config: StoreConfig, input: CreateInput): Promise<StoredRecord> {
-  const existing = await loadStore(root);
-  const taken = new Set(existing.map((item) => path.basename(item.filePath)));
   const createdAt = input.createdAt ?? nowUtc();
   const format = input.format ?? config.defaultFormat;
   const enriched = input.enriched ?? (config.capture === "enriched" && input.body === undefined);
@@ -294,7 +285,7 @@ export async function createRecord(root: string, config: StoreConfig, input: Cre
   if (input.supersedes?.length) record.supersedes = input.supersedes;
   if (input.supersededBy?.length) record.supersededBy = input.supersededBy;
   if (input.related?.length) record.related = input.related;
-  const filePath = path.join(root, fileName(createdAt, input.decision, format, taken));
+  const filePath = path.join(root, fileName(createdAt, input.decision, record.id, format));
   return saveStored({ record, filePath, format, mtimeMs: 0 });
 }
 

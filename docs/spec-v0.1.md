@@ -67,7 +67,7 @@ Changing the `decision` text of a `decided` record warns. The tool still saves. 
 
 ## Identity and filenames
 
-`id` is the identity. The filename is `YYYY-MM-DD-slug.md` or `.json`, using the `createdAt` date. The slug is ASCII, lowercase, at most 60 characters. Collisions append `-2`, `-3`, and so on. Renaming a file does not change the record. A short unique id prefix may select a record.
+`id` is the identity. The filename is `YYYY-MM-DD-slug-<id>.md` or `.json`, using the `createdAt` date. The slug is ASCII, lowercase, at most 60 characters. The full id is appended so two decisions with the same sentence never share a filename. Renaming a file does not change the record. A short unique id prefix may select a record. `decision list` prints the first 8 characters of the id for that purpose.
 
 ## Stores
 

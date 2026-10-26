@@ -3,3 +3,4 @@ dist/
 *.tgz
 LOCAL_PUBLISH.md
 .DS_Store
+PROJECT_CONTEXT.md
